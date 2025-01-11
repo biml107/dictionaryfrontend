@@ -2,16 +2,22 @@
  
 
 import React, { useState } from 'react';
-import { Form ,Row,Col,Container} from 'react-bootstrap';
+import { Form ,Row,Col,Containe,Button} from 'react-bootstrap';
 import LoadingButton from '../CommonComponents/LoadingButton';
-
+import { useNavigate } from 'react-router-dom';
 
 const MyForm = () => {
+  const navigate = useNavigate();
+
   const [selectedStandard, setSelectedStandard] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedBookTitle, setSelectedBookTitle] = useState('');
   const[selectedChapter,setSelectedChapter]=useState('');
+   
 
+  const navigateToGetBook=()=>{
+    navigate(`/getbook`);
+  }
 
   // Function to handle selection of standard
   const handleStandardSelect = (event) => {
@@ -101,7 +107,7 @@ const MyForm = () => {
 
 {selectedStandard==="10"&&selectedSubject === 'english' && (
             <>
-              <option value="firstFlight">First Flight</option>
+              <option value="First Flight">First Flight</option>
               <option value="footprintsWithoutFeet">Footprints Without Feet</option>
             </>
           )}
@@ -130,29 +136,14 @@ const MyForm = () => {
         </Form.Select>
      </div>
         
-       {selectedStandard&&selectedSubject&&selectedBookTitle&&selectedChapter&&<LoadingButton/>}
+       {selectedStandard&&selectedSubject&&selectedBookTitle&&selectedChapter&&<Button variant="outline-primary" onClick={navigateToGetBook}>Get Book</Button>}
         
       
 
       </Stack>
 
 
-      {selectedStandard&&selectedSubject&&selectedBookTitle&&<>
-        <Container fluid>
-      <Row>
-        <Col sm={3} style={{backgroundColor:'#f0f0f0',minHeight:'100vh'}}> 
-        <ul>
-            <li>link1</li>
-            <li>link1</li>
-            <li>link1</li>
-            <li>link1</li>
-        </ul>
-        </Col>
-        <Col sm={9}>sm=4</Col>
-      </Row>
-      
-    </Container>
-        </>}
+     
 
         
         </>

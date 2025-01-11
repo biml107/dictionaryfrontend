@@ -20,8 +20,9 @@ function NavbarComponent() {
   useEffect(() => {
     const fetchLogin = async () => {
       try {
-        const profile=await axios.get(`${BASE_API_URL}user/getprofile` ,{withCredentials:true}
-        );
+        const response= await axios.get(`${BASE_API_URL}user/getbook?standard=10&chapter=1&bookName=First Flight`,{withCredentials:true});
+        console.log(response.data.data);
+        const profile=await axios.get(`${BASE_API_URL}user/getprofile` ,{withCredentials:true});
         if (profile.status === 200 ) {
           dispatch(loggedIn(profile.data.userDetails));
 

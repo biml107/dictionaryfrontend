@@ -1,9 +1,10 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavbarComponent from './Components/NavbarComponent/Navbar';
 import SelectBookNav from './Components/SelectBookNav/SelectBookNavbar';
-import Englishbook from './Components/EnglishbookComponent/Englishbook';
+import Englishbook from './Components/MUI/english/parent';
+
+import Layout from './Components/MUI/layout';
 import{
   BrowserRouter,Routes,Route
 } from 'react-router-dom'
@@ -11,17 +12,16 @@ function App() {
   return (
     <div className="App">
        <BrowserRouter>
-       <NavbarComponent />
-       
+       <Layout>
           <Routes>
 
-            <Route path="/" element={<SelectBookNav/>}>
-
+            <Route path="/" element={<Englishbook />}>
+            {/* <Route path="/getbook" element={<Englishbook />} /> */}
                    
               </Route>
                     
           </Routes>
-       
+          </Layout>
        </BrowserRouter>
     </div>
   );
