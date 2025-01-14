@@ -49,10 +49,17 @@ const SentenceDetails = () => {
   const [newExplanation, setNewExplanation] = useState({ hindi: '', hindiexplain: '' });
   const[dialogTitleText, setDialogTitleText]= useState({});
 
+  const[editDialogopen,setEditDialogOpen]= useState(false);
+  const[currentHindiSentence,setCurrentHindiSentence]= useState({});
+  const[editdialogTitleText, seteditdialogTitleText]= useState({});
+  const [currentExplanation, setCurrentExplanation] = useState({ hindi: '', hindiexplain: '' });
    const{
       selectedChapter
     } = useContext(LayoutPageContext);
-  const toggleExpand = (index) => {
+  const 
+  
+  
+  toggleExpand = (index) => {
     setExpandedIndexes((prev) => ({
       ...prev,
       [index]: !prev[index],
@@ -73,6 +80,12 @@ const SentenceDetails = () => {
     setDialogOpen(true);
   };
 
+  const handleEditExplanation = ({value,uuid,hindi,hindiExplain}) => {
+    console.log("hindiSentence Id ",uuid,hindi,hindiExplain);
+    setCurrentHindiSentence({value,uuid});
+    setCurrentExplanation({hindi,hindiexplain:hindiExplain})
+    setEditDialogOpen(true);
+  };
   const handleDialogClose = () => {
     setDialogOpen(false);
     setCurrentSentence({});
@@ -80,6 +93,11 @@ const SentenceDetails = () => {
     setDialogTitleText({});
     setNewExplanation({ hindi: '', hindiexplain: '' });
   };
+  const handleEditDialogClose=()=>{
+    setEditDialogOpen(false);
+    setCurrentHindiSentence({});
+    seteditdialogTitleText({});
+  }
 
   const handleSaveExplanation = async() => {
     console.log(`Saving explanation for sentence ${currentSentence}:`,currentSentence, newExplanation);
@@ -105,6 +123,37 @@ const SentenceDetails = () => {
       console.log("hindi Sentences fetch api failed",err.response.data.message);
       setTimeout(function() {
         setDialogTitleText({});
+    }, 4000);
+    }
+
+    // Add logic to save the explanation
+    //handleDialogClose();
+  };
+
+  const handleHindiExplanationUpdate = async() => {
+    //console.log(`Saving explanation for sentence ${currentSentence}:`,currentSentence, newExplanation);
+    try{
+      const sentencesResponse= await axios.put(`${BASE_API_URL}/user/updatehindi`,
+        {hindiSentenceId:currentHindiSentence.uuid,
+          hindi:currentExplanation.hindi,
+          hindiExplain:currentExplanation.hindiexplain
+        },
+        {withCredentials:true});
+      
+        
+       console.log("updated sentence",sentencesResponse.data)
+        seteditdialogTitleText({message:"Updated Successfully",color:"blue"})
+        setTimeout(function() {
+          seteditdialogTitleText({});
+      }, 4000);
+            
+    }
+    catch(err){
+      seteditdialogTitleText({message:err.response.data.message,color:"red"})
+       
+      console.log("update Sentences fetch api failed",err.response.data.message);
+      setTimeout(function() {
+        seteditdialogTitleText({});
     }, 4000);
     }
 
@@ -245,7 +294,8 @@ const SentenceDetails = () => {
             </Box>
           </Collapse></span>
        // </Box>
-      ))}
+      ))
+      }
     </Typography>
 
 
@@ -363,7 +413,7 @@ const SentenceDetails = () => {
                     </IconButton></Tooltip>
                     <Tooltip title="Edit">
                     <IconButton
-                      onClick={() => handleReport(index, detailIndex)}
+                      onClick={() => handleEditExplanation({value:sentence.value,uuid:detail.hindiSentenceId,hindi:detail.hindi,hindiExplain:detail.hindiExplain})}
                       color="error"
                       size="small"
                     >
@@ -374,7 +424,9 @@ const SentenceDetails = () => {
                 </Box>
               ))}
             </Box>
-          </Collapse></span>
+          </Collapse>
+          
+          </span>
        // </Box>
       ))}
      <Dialog open={dialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
@@ -429,6 +481,59 @@ const SentenceDetails = () => {
           </Button>
           <Button onClick={handleSaveExplanation} color="primary" variant="contained">
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={editDialogopen} onClose={ handleEditDialogClose} maxWidth="sm" fullWidth>
+        
+        {Object.keys(editdialogTitleText).length !== 0?(<DialogTitle sx={{ color: `${editdialogTitleText.color}` }}>
+        {  editdialogTitleText.message } 
+        
+        </DialogTitle>):
+        <DialogTitle sx={{ color: 'blue' }} >
+        { currentHindiSentence.value}
+        </DialogTitle>}
+        <IconButton
+            aria-label="close"
+            onClick={handleEditDialogClose}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        <DialogContent dividers>
+          <TextField
+            label="Hindi"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            multiline
+            rows={2}
+            maxRows={6}
+            value={currentExplanation.hindi}
+            onChange={(e) =>
+              setCurrentExplanation((prev) => ({ ...prev, hindi: e.target.value }))
+            }
+            sx={{ resize: 'vertical' }}
+          />
+          <TextField
+            label="Hindi Explanation"
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            multiline
+            rows={4}
+            maxRows={10}
+            value={currentExplanation.hindiexplain}
+            onChange={(e) =>
+              setCurrentExplanation((prev) => ({ ...prev, hindiexplain: e.target.value }))
+            }
+            sx={{ resize: 'vertical' }}
+          />
+        </DialogContent>
+        <DialogActions>
+           
+          <Button onClick={handleHindiExplanationUpdate} color="primary" variant="contained">
+            Update
           </Button>
         </DialogActions>
       </Dialog>

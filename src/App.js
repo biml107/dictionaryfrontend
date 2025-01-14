@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SelectBookNav from './Components/SelectBookNav/SelectBookNavbar';
 import Englishbook from './Components/MUI/english/parent';
-
+import Englishbook1 from './Components/MUI/english/englishbook';
 import Layout from './Components/MUI/layout';
 import{
   BrowserRouter,Routes,Route
@@ -15,8 +15,8 @@ function App() {
        <Layout>
           <Routes>
 
-            <Route path="/" element={<Englishbook />}>
-            {/* <Route path="/getbook" element={<Englishbook />} /> */}
+            <Route path="/" >
+            <Route path="english" element={<Englishbook1 />} />
                    
               </Route>
                     
