@@ -1,4 +1,4 @@
-import{ useEffect, useState,useContext } from 'react';
+import{ useEffect, useState,  } from 'react';
 import {
 
     IconButton,
@@ -13,19 +13,18 @@ import {
   import CloseIcon from '@mui/icons-material/Close';
   import { BASE_API_URL } from '../../../constants'; 
 import axios from 'axios';
-import { useSelector,useDispatch } from 'react-redux';
+ 
 
-const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpen}) =>{
+const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpen,editTranslateDialogOpen}) =>{
        
-  const loginState = useSelector((state) => state.login);
-  const dispatch = useDispatch();
+ 
 
        const[dialogTitleText, setDialogTitleText]= useState({});
        const [newExplanation, setNewExplanation] = useState({ hindi: translate.hindi, hindiExplain: translate.hindiExplain });
 
 
        useEffect(()=>{
-        console.log("NewExplanation",newExplanation);
+        console.log("NewExplanation",newExplanation.hindi.length,newExplanation.hindiExplain.length);
        })
        const closeEditTranslateDialog=()=>{
         setEditTranslateDialogOpen(false)
@@ -44,6 +43,7 @@ const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpe
             
            console.log("updated translate",sentencesResponse.data);
             setDialogTitleText({message:"Saved Successfully",color:"blue"});
+
             //setNewExplanation({ hindi: '', hindiExplain: '' });
             setTimeout(function() {
               setDialogTitleText({});
@@ -59,19 +59,19 @@ const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpe
         }, 4000);
         }
     
-        // Add logic to save the explanation
-        //handleDialogClose();
+        
       };
 
 
     return(
         <>
-          <Dialog open={true} onClose={closeEditTranslateDialog} maxWidth="sm" fullWidth>
+          <Dialog key={currentSentence.uuid} open={editTranslateDialogOpen} onClose={closeEditTranslateDialog} maxWidth="sm" fullWidth disableEnforceFocus>
         
         {Object.keys(dialogTitleText).length !== 0?(<DialogTitle sx={{ color: `${dialogTitleText.color}` }}>
         {  dialogTitleText.message } 
         
-        </DialogTitle>):<DialogTitle sx={{ color: 'blue' }} >
+        </DialogTitle>):
+        <DialogTitle sx={{ color: 'blue' }} >
         { currentSentence.value}
         
         </DialogTitle>}
@@ -94,9 +94,10 @@ const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpe
             required
             value={newExplanation.hindi}
             onChange={(e) =>
-              setNewExplanation((prev) => ({ ...prev, hindi: e.target.value }))
+              setNewExplanation((prev) => ({ ...prev, hindi: e.target.value.replace(/\s+/g,' ')}))
             }
             sx={{ resize: 'vertical' }}
+            helperText={`Max ${currentSentence.value.length*10-newExplanation.hindi.length} chars`}
           />
           <TextField
             label="Hindi Explanation"
@@ -108,9 +109,10 @@ const EditHindiTranslate = ({currentSentence,translate,setEditTranslateDialogOpe
             maxRows={10}
             value={newExplanation.hindiExplain}
             onChange={(e) =>
-              setNewExplanation((prev) => ({ ...prev, hindiExplain: e.target.value }))
+              setNewExplanation((prev) => ({ ...prev, hindiExplain: e.target.value.replace(/\s+/g,' ') }))
             }
             sx={{ resize: 'vertical' }}
+            helperText={`Max ${currentSentence.value.length*20-newExplanation.hindiExplain.length} chars`}
           />
         </DialogContent>
         <DialogActions>

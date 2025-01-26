@@ -1,10 +1,8 @@
 import{ useEffect, useState,useContext } from 'react';
 import {
-    Box,
+    
     IconButton,
-    Collapse,
-    Tooltip,
-    Typography,
+    
     Dialog,
     DialogActions,
     DialogContent,
@@ -87,9 +85,10 @@ const AddHindiTranslate = ({currentSentence,setAddTranslateDialogOpen}) =>{
             required
             value={newExplanation.hindi}
             onChange={(e) =>
-              setNewExplanation((prev) => ({ ...prev, hindi: e.target.value }))
+              setNewExplanation((prev) => ({ ...prev, hindi: e.target.value.replace(/\s+/g,' ') }))
             }
             sx={{ resize: 'vertical' }}
+            helperText={`Max ${currentSentence.value.length*10-newExplanation.hindi.length} chars`}
           />
           <TextField
             label="Hindi Explanation"
@@ -101,9 +100,10 @@ const AddHindiTranslate = ({currentSentence,setAddTranslateDialogOpen}) =>{
             maxRows={10}
             value={newExplanation.hindiexplain}
             onChange={(e) =>
-              setNewExplanation((prev) => ({ ...prev, hindiexplain: e.target.value }))
+              setNewExplanation((prev) => ({ ...prev, hindiexplain: e.target.value.replace(/\s+/g,' ') }))
             }
             sx={{ resize: 'vertical' }}
+            helperText={`Max ${currentSentence.value.length*20-newExplanation.hindiexplain.length} chars`}
           />
         </DialogContent>
         <DialogActions>

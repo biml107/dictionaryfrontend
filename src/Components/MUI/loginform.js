@@ -6,7 +6,7 @@ import {
   Typography,
   Paper,
   Container,
-  Stack,
+
 } from '@mui/material';
 import axios from 'axios';
 import { loggedIn,notLoggedIn } from "../../redux/login/loginSlice";
@@ -47,6 +47,10 @@ const LoginPage = ({toggleLogin}) => {
       //dispatch(loggedIn(profile.data.user));
       dispatch(loggedIn(data.user));
       toggleLogin();
+
+      setTimeout(function() {
+       dispatch(notLoggedIn())
+    }, 60*60*1000);
 
     } catch (error) {
       console.error('Error:', error);

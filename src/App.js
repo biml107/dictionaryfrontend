@@ -12,13 +12,14 @@ function App() {
   return (
     <div className="App">
        <BrowserRouter>
+       
        <Layout>
           <Routes>
 
-            <Route path="/" >
-            <Route path="english" element={<Englishbook1 />} />
+            <Route path="/admin" element={<Englishbook1 />} />
+            <Route path="/*" element={<Englishbook1 />} />
                    
-              </Route>
+              
                     
           </Routes>
           </Layout>

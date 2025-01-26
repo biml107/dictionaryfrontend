@@ -4,33 +4,31 @@ import {
   IconButton,
   Collapse,
   Tooltip,
-  Typography,
   
 } from '@mui/material';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
-import EditIcon from '@mui/icons-material/Edit';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
+
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import { BASE_API_URL } from '../../../constants'; 
 import axios from 'axios';
 import AddHindiTranslate from './addhinditranslate';
-import EditHindiTranslate from './edithinditranslate';
-import { useSelector,useDispatch } from 'react-redux';
+import HindiTranslateView from './hinditranslateview';
 const Englishentenceitem = ({ index, sentence }) => {
 
-  const loginState = useSelector((state) => state.login);
-  const dispatch = useDispatch();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [addTranslateDialogOpen, setAddTranslateDialogOpen] = useState(false);
-    const [editTranslateDialogOpen, setEditTranslateDialogOpen] = useState(false);
+    
      
     const [translates,setTranslates]=useState([]);
 
+useEffect(()=>{
+  setIsExpanded(false);
+setTranslates([]);
 
+},[sentence])
      const reloadTranslate=async({englishSentenceId})=>{
       
       try{
@@ -71,15 +69,7 @@ const Englishentenceitem = ({ index, sentence }) => {
 
         setIsExpanded((prev) => !prev);
       };
-      const handleLike = (sentenceIndex, explanationIndex) => {
-        console.log(`Liked explanation ${explanationIndex} of sentence ${sentenceIndex}`);
-        // Add your logic here
-      };
-    
-      const handleReport = (sentenceIndex, explanationIndex) => {
-        console.log(`Reported explanation ${explanationIndex} of sentence ${sentenceIndex}`);
-        // Add your logic here
-      };
+     
 
       useEffect(()=>{
         console.log("Translates",translates);
@@ -87,7 +77,8 @@ const Englishentenceitem = ({ index, sentence }) => {
 
       return (
     <>
-        <span style={{ display: 'inline' }}>
+        <span key={index} 
+        style={{ display: 'inline' }}>
             {sentence.value}{' '}
             <IconButton
               onClick={() => toggleExpand({englishSentenceId:sentence.uuid})}
@@ -144,7 +135,7 @@ const Englishentenceitem = ({ index, sentence }) => {
               </>
             )}
           
-          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+          <Collapse in={isExpanded} key={index} timeout="auto" unmountOnExit>
             <Box
               sx={{
                 marginTop: 1,
@@ -157,78 +148,7 @@ const Englishentenceitem = ({ index, sentence }) => {
               }}
             >
               {translates.length>0 ? translates.map((translate, translateIndex) => (
-                <Box
-                  key={translateIndex}
-                  sx={{
-                    marginBottom: 2,
-                    padding: 1,
-                    border: '1px solid #ccc',
-                    borderRadius: 1,
-                  }}
-                >
-                    <Box
-                    sx={{
-                      paddingBottom: 1,
-                      borderBottom: '1px solid #eee',
-                    }}
-                  >
-                    <Typography variant="body2" color="text.secondary">
-                      {translate.hindi}
-                    </Typography>
-                  </Box>
-
-                   {/* Lower Part: Additional Info and Buttons */}
-                   <Box
-                    sx={{
-                      marginTop: 1,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Typography variant="caption" color="text.secondary">
-                      {translate.hindiExplain} {/* Additional info */}
-                    </Typography>
-                  {/* <Typography variant="body2" color="text.secondary">
-                    {detail}
-                  </Typography> */}
-                  <Box sx={{ display: 'flex', gap: 1 }}>
-                    <Tooltip title="Like">
-                    <IconButton
-                      //onClick={() => handleLike(index, translateIndex)}
-                      color="primary"
-                      size="small"
-                    >
-                      <FavoriteBorderIcon fontSize="small" />
-                    </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Report">
-                    <IconButton
-                      //onClick={() => handleReport(index, translateIndex)}
-                      color="error"
-                      size="small"
-                    >
-                      <FlagOutlinedIcon fontSize="small" />
-                    </IconButton></Tooltip>
-
-
-                    {(loginState?.user?.uuid===translate.userId)&&<Tooltip title="Edit">
-                    <IconButton
-                     onClick={() => setEditTranslateDialogOpen(true) }
-                      color="error"
-                      size="small"
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton></Tooltip>}
-
-                    {editTranslateDialogOpen &&<EditHindiTranslate currentSentence={sentence}
-                                                                   translate={translate}
-                                                                   setEditTranslateDialogOpen={setEditTranslateDialogOpen}
-                    
-                    ></EditHindiTranslate> }
-                  </Box>
-                  </Box>
-                </Box>
+               <HindiTranslateView key={translateIndex} translate={translate} sentence={sentence} translateIndex={translateIndex}></HindiTranslateView>
               ))
             :
           <span>Not Available</span>

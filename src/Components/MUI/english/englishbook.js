@@ -1,9 +1,5 @@
 import{ useEffect, useState,useContext } from 'react';
-import { Typography, IconButton, Collapse, Box ,Tooltip,Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,TextField
+import { Typography,
   } from '@mui/material';
  
 import { LayoutPageContext } from '../layout';
@@ -15,15 +11,10 @@ const EnglishBook = () =>{
 const{
       selectedChapter
     } = useContext(LayoutPageContext);
-    const toggleExpand = (index) => {
-        setExpandedIndexes((prev) => ({
-          ...prev,
-          [index]: !prev[index],
-        }));
-      };
+    
     //states related to EnglishBook component
     const[chapterSentences,setChapterSentences]= useState([]);
-    const [expandedIndexes, setExpandedIndexes] = useState({});
+  
 
     useEffect(()=>{
 
@@ -64,37 +55,6 @@ useEffect(()=>{
                     chapterSentences.map((sentence, index) => (
                         <Englishentenceitem key={index} index={index} sentence={sentence} />
                     ))
-
-            //     chapterSentences.map((sentence,index)=> (
-            //         <span style={{ display: 'inline' }}>
-            //             {sentence.value}{' '}
-            //             <IconButton
-            //             onClick={() => toggleExpand(index)}
-            //             size="small"
-            //             aria-label="expand"
-            //             color="info"
-            //             sx={{
-            //                 fontSize: 'inherit',
-            //                 padding: 0,
-            //                 marginLeft: 0,
-            //                 verticalAlign: 'middle',
-            //             }}
-            //          >
-            //           <ExpandMoreOutlinedIcon
-            //     fontSize="inherit"
-            //     sx={{
-            //       transform: expandedIndexes[index] ? 'rotate(180deg)' : 'rotate(0deg)',
-            //       transition: 'transform 0.3s',
-            //     }}
-            //   />
-            //             </IconButton>
-
-
-
-
-            //         </span>
-
-            //     ))
              }
 
             </Typography>

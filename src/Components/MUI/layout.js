@@ -123,7 +123,7 @@ export default function PersistentDrawerLeft({children}) {
         }
       } catch (err) {
         
-
+        dispatch(notLoggedIn());
       }
     }
     fetchLogin();
